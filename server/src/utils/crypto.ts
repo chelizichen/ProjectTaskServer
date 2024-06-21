@@ -13,5 +13,7 @@ export function createPassword(password) {
 export async function checkPassword(password, hash_password) {
   // 先对需要验证的密码进行加密
   password = await createPassword(password)
+  console.log('password',password);
+  
   return password === hash_password
 }

@@ -9,12 +9,25 @@ import { ProjectModule } from './modules/project/project.module'
 import { TaskModule } from './modules/task/task.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { FileModule } from './modules/file/file.module'
-import { MessageModule } from './modules/message/message.module'
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join, resolve } from 'path'
+import { cwd } from 'process'
+
+// import { MessageModule } from './modules/message/message.module'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(cwd(), 'upload'),
+      serveRoot: '/upload', // 需要添加'/' 此处相当于添加前缀
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(cwd(), 'web'),
+      serveRoot: '/web', // 需要添加'/' 此处相当于添加前缀
+      renderPath:"index.html"
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -36,7 +49,7 @@ import { MessageModule } from './modules/message/message.module'
     TaskModule,
     AuthModule,
     FileModule,
-    MessageModule,
+    // MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

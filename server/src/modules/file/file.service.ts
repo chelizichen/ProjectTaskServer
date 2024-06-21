@@ -7,6 +7,9 @@ import { File } from './entities/file.entity'
 import { Like, Repository } from 'typeorm'
 import { UploadFile } from './dto/file.dto'
 import { User } from '../user/entities/user.entity'
+import { resolve } from 'path'
+import { createWriteStream, mkdirSync, existsSync } from 'fs'
+import oss from '../../config/oss'
 
 @Injectable()
 export class FileService {
@@ -15,6 +18,10 @@ export class FileService {
     @InjectRepository(File) private readonly fileRepository: Repository<File>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {
+    const fsdir = resolve(process.cwd(),oss.dir)
+    if (!existsSync(fsdir)) {
+      mkdirSync(fsdir)
+    }
     this.client = new OSS(client)
   }
 
@@ -59,13 +66,13 @@ export class FileService {
   async uploadFile(name: string, stream: Readable) {
     let res
     try {
-      res = await this.client.putStream(name, stream)
-      // 将文件设置为公共可读
-      await this.client.putACL(name, 'public-read')
+      res = resolve(process.cwd(), oss.dir, name)
+      const ws = createWriteStream(res)
+      stream.pipe(ws)
     } catch (error) {
       console.log(error)
     }
-    return res.url
+    return res
   }
 
   async createDir(name: string, user_id: string) {
