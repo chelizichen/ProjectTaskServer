@@ -1,8 +1,10 @@
 import axios, { ResponseType } from 'axios'
 import { message } from 'antd'
 
+const BASE_URL = import.meta.env.VITE_API_URL
+
 const service = axios.create({
-  baseURL: 'http://localhost:8888',
+  baseURL: BASE_URL,
   timeout: 10000
 })
 

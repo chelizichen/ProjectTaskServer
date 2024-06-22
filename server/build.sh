@@ -3,18 +3,20 @@ rm -r dist
 
 # 构建
 npm run build
-cp .env dist/.env
+cp .env.production dist/.env
 cp package.json dist/package.json
+cp package-lock.json dist/package-lock.json
 cd dist 
 # 编译
 npm i --production -f
 
-cd ../../
 # client 打包
+cd ../../
 npm run build
 # 打包静态资源
-mv -r web  ./server/dist/web
+cp -r ./web  ./server/dist/
 
 # 打包
-cd ./server
-tar -cvf ProjectTaskServer.tar.gz ./dist
+cd ./server/dist
+tar -cvzf ProjectTaskServer.tar.gz ./* ./.env
+mv ProjectTaskServer.tar.gz ../

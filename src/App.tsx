@@ -1,12 +1,10 @@
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
 import Routes from './router/Routes'
 
 const App = () => {
   return (
-    <Router>
-      <Routes />
-    </Router>
+    <RouterProvider router={Routes()}/>
   )
 }
 
