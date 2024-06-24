@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Input, Modal, Select, DatePicker, message } from 'antd'
 import dayjs from 'dayjs'
 import api from '../../api'
@@ -21,7 +21,7 @@ const AddTask = (props: Props) => {
   }
   const user: LoginUser['user'] = JSON.parse(localStorage.getItem('task-user') as string)
   const [form] = Form.useForm()
-
+  const [editorContent,setEditorContent] = useState('')
   const addTask = () => {
     form
       .validateFields()
@@ -34,7 +34,8 @@ const AddTask = (props: Props) => {
             ...values,
             startTime,
             endTime,
-            project: project.id
+            project: project.id,
+            desc:editorContent,
           })
           .then((res) => {
             if (res.code === 200) {
@@ -99,9 +100,8 @@ const AddTask = (props: Props) => {
             placeholder={['开始时间', '结束时间']}
           />
         </Form.Item>
-        <Form.Item name="desc" rules={[{ required: true, message: '任务描述不能为空' }]}>
-          <EditorComponent></EditorComponent>
-          {/* <Input.TextArea rows={10} placeholder="任务描述" allowClear autoComplete="off" /> */}
+        <Form.Item rules={[{ required: true, message: '任务描述不能为空' }]}>
+          <EditorComponent emitChange={setEditorContent} initContent=''></EditorComponent>
         </Form.Item>
       </Form>
     </Modal>

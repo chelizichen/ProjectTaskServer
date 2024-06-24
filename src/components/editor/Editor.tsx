@@ -1,10 +1,17 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AiEditor } from 'aieditor'
 import 'aieditor/dist/style.css'
 import api from '../../api'
 
-function App() {
+type IEditorComponent = {
+  emitChange: (value: string) => void
+  initContent:string
+}
+
+function EditorComponent(props:IEditorComponent) {
+  const emitChange = props.emitChange
   const BASE_UPLOAD = import.meta.env.VITE_API_BASE_UPLOAD
+  const initContent = props.initContent
   //定义 ref
   const divRef = useRef(null)
   const imageConf = {
@@ -57,8 +64,12 @@ function App() {
       const aiEditor = new AiEditor({
         element: divRef.current,
         placeholder: '任务描述',
-        content: '',
-        image: imageConf
+        content: initContent,
+        image: imageConf,
+        onChange: (content:AiEditor) => {
+          emitChange(content.getHtml())
+          console.log(content.getHtml())
+        },
       })
       return () => {
         aiEditor.destroy()
@@ -69,4 +80,4 @@ function App() {
   return <div ref={divRef} style={{ height: '400px' }} />
 }
 
-export default App
+export default EditorComponent

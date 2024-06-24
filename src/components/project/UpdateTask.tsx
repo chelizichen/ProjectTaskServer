@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
-import { Modal, Form, Input, Select, DatePicker, message } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Modal, Form, Input, Select, DatePicker, message, Switch } from 'antd'
 import { ProjectItem } from '../../types/project'
 import { LoginUser } from '../../api/modules/user/types'
 import { TaskItem } from '../../types/task'
 import dayjs from 'dayjs'
 import api from '../../api'
+import EditorComponent from '../editor/Editor'
 
 const { RangePicker } = DatePicker
 
@@ -18,6 +19,17 @@ interface Props {
 
 const UpdateTask = (props: Props) => {
   const { project, task, visible, setVisible, getTaskDetail } = props
+  const [abled, setAbled] = useState(true)
+  const [editorContent, setEditorContent] = useState('')
+  const onChange = (checked: boolean) => {
+    setAbled(checked)
+    if (checked) {
+      const value = form.getFieldValue('desc')
+      console.log('value',value);
+      setEditorContent(value)
+    }
+  }
+
   const [form] = Form.useForm()
   const user: LoginUser['user'] = JSON.parse(localStorage.getItem('task-user') as string)
   const rangeConfig = {
@@ -70,12 +82,10 @@ const UpdateTask = (props: Props) => {
       onCancel={() => setVisible(false)}
       maskClosable={false}
     >
+      <Switch defaultChecked onChange={onChange} />
       <Form form={form}>
         <Form.Item name="name" rules={[{ required: true, message: '任务名称不能为空' }]}>
           <Input placeholder="任务名称" allowClear autoComplete="off" />
-        </Form.Item>
-        <Form.Item name="desc" rules={[{ required: true, message: '任务描述不能为空' }]}>
-          <Input placeholder="任务描述" allowClear autoComplete="off" />
         </Form.Item>
         {project && project.users.length ? (
           <Form.Item name="users">
@@ -104,6 +114,16 @@ const UpdateTask = (props: Props) => {
             format="YYYY-MM-DD HH:mm:ss"
             placeholder={['开始时间', '结束时间']}
           />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true, message: '任务描述不能为空' }]}
+          className="desc-border"
+        >
+          {abled ? (
+            <EditorComponent emitChange={setEditorContent} initContent={editorContent}></EditorComponent>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: form.getFieldValue('desc') }}></div>
+          )}
         </Form.Item>
       </Form>
     </Modal>
