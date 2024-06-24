@@ -21,13 +21,13 @@ const UpdateTask = (props: Props) => {
   const { project, task, visible, setVisible, getTaskDetail } = props
   const [abled, setAbled] = useState(false)
   const [editorContent, setEditorContent] = useState('')
+
+
+
   const onChange = (checked: boolean) => {
     setAbled(checked)
-    if (checked) {
-      const value = form.getFieldValue('desc')
-      console.log('value',value);
-      setEditorContent(value)
-    }
+    const value = form.getFieldValue('desc')
+    setEditorContent(value)
   }
 
   const [form] = Form.useForm()
@@ -45,7 +45,8 @@ const UpdateTask = (props: Props) => {
           .updateTask(task.id, {
             ...values,
             startTime: dayjs(values.time[0]).format('YYYY-MM-DD HH:mm:ss'),
-            endTime: dayjs(values.time[1]).format('YYYY-MM-DD HH:mm:ss')
+            endTime: dayjs(values.time[1]).format('YYYY-MM-DD HH:mm:ss'),
+            desc:editorContent,
           })
           .then((res) => {
             if (res.code === 200) {
@@ -74,6 +75,10 @@ const UpdateTask = (props: Props) => {
     }
   }, [task])
 
+  useEffect(()=>{
+    setAbled(false)
+  },[])
+
   return task ? (
     <Modal
       title={task.name}
@@ -82,7 +87,7 @@ const UpdateTask = (props: Props) => {
       onCancel={() => setVisible(false)}
       maskClosable={false}
     >
-      <Switch defaultChecked onChange={onChange} />
+      <Switch defaultValue={false} onChange={onChange} />
       <Form form={form}>
         <Form.Item name="name" rules={[{ required: true, message: '任务名称不能为空' }]}>
           <Input placeholder="任务名称" allowClear autoComplete="off" />
