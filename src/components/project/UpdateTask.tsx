@@ -19,7 +19,7 @@ interface Props {
 
 const UpdateTask = (props: Props) => {
   const { project, task, visible, setVisible, getTaskDetail } = props
-  const [abled, setAbled] = useState(true)
+  const [abled, setAbled] = useState(false)
   const [editorContent, setEditorContent] = useState('')
   const onChange = (checked: boolean) => {
     setAbled(checked)
