@@ -7,13 +7,16 @@ import { File } from './entities/file.entity'
 import { Like, Repository } from 'typeorm'
 import { UploadFile } from './dto/file.dto'
 import { User } from '../user/entities/user.entity'
-import { resolve } from 'path'
+import { resolve, join } from 'path'
 import { createWriteStream, mkdirSync, existsSync } from 'fs'
 import oss from '../../config/oss'
-
+import conf from '../../config/config.default'
+import { cwd } from 'node:process'
 @Injectable()
 export class FileService {
   public client
+  public prefix:string
+
   constructor(
     @InjectRepository(File) private readonly fileRepository: Repository<File>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
@@ -23,7 +26,9 @@ export class FileService {
       mkdirSync(fsdir)
     }
     this.client = new OSS(client)
+    this.prefix = process.env.UPLOAD_PREFIX
   }
+
 
   async upload(
     name: string,
@@ -66,13 +71,14 @@ export class FileService {
   async uploadFile(name: string, stream: Readable) {
     let res
     try {
-      res = resolve(process.cwd(), oss.dir, name)
+      res = resolve(cwd(), oss.dir, name)
       const ws = createWriteStream(res)
       stream.pipe(ws)
     } catch (error) {
       console.log(error)
     }
-    return res
+    const fp = join(this.prefix,oss.dir, name)
+    return fp
   }
 
   async createDir(name: string, user_id: string) {

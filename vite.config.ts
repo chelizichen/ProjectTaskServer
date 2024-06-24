@@ -5,7 +5,8 @@ import viteEslint from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode})=>{
-  loadEnv(mode, process.cwd(), '')
+  const env = loadEnv(mode, process.cwd(), '')
+  const BASE_URL = env.VITE_API_URL
   return {
     plugins: [react(), viteEslint()],
     resolve: {
@@ -16,7 +17,15 @@ export default defineConfig(({mode})=>{
     base:'/web/',
     build:{
       outDir:"./web",
+    },
+    server:{
+      proxy:{
+        '/api':{
+          target: BASE_URL,
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/api/, '')
+        }
+      }
     }
   }
-
 })

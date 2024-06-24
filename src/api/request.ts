@@ -1,10 +1,9 @@
 import axios, { ResponseType } from 'axios'
 import { message } from 'antd'
 
-const BASE_URL = import.meta.env.VITE_API_URL
-
+const BASE = import.meta.env.VITE_API_BASE
 const service = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE,
   timeout: 10000
 })
 
@@ -122,3 +121,5 @@ export function remove<T>(url: string, params?: any, _object = {}): Promise<IRes
     ..._object
   })
 }
+
+export default service

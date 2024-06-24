@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import api from '../../api'
 import { ProjectItem } from '../../types/project'
 import { LoginUser } from '../../api/modules/user/types'
-
+import EditorComponent from '../editor/Editor'
 const { RangePicker } = DatePicker
 
 interface Props {
@@ -70,9 +70,7 @@ const AddTask = (props: Props) => {
         <Form.Item name="name" rules={[{ required: true, message: '任务名称不能为空' }]}>
           <Input placeholder="任务名称" allowClear autoComplete="off" />
         </Form.Item>
-        <Form.Item name="desc" rules={[{ required: true, message: '任务描述不能为空' }]}>
-          <Input placeholder="任务描述" allowClear autoComplete="off" />
-        </Form.Item>
+
         {project && project.users && project.users.length ? (
           <Form.Item name="users">
             <Select placeholder="项目负责人" showSearch allowClear mode="multiple">
@@ -100,6 +98,10 @@ const AddTask = (props: Props) => {
             format="YYYY-MM-DD HH:mm:ss"
             placeholder={['开始时间', '结束时间']}
           />
+        </Form.Item>
+        <Form.Item name="desc" rules={[{ required: true, message: '任务描述不能为空' }]}>
+          <EditorComponent></EditorComponent>
+          {/* <Input.TextArea rows={10} placeholder="任务描述" allowClear autoComplete="off" /> */}
         </Form.Item>
       </Form>
     </Modal>

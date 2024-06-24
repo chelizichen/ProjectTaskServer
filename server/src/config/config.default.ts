@@ -72,5 +72,6 @@ export default {
       '.map',
       ".npy"
     ],
+    prefix: process.env.UPLOAD_PREFIX
   },
 }
