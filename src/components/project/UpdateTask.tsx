@@ -77,6 +77,7 @@ const UpdateTask = (props: Props) => {
 
   useEffect(()=>{
     setAbled(false)
+    setEditorContent(form.getFieldValue('desc'))
     return ()=>{
       setAbled(false)
     }
