@@ -70,14 +70,15 @@ export class FileService {
 
   async uploadFile(name: string, stream: Readable) {
     let res
+    const fn = `file_${new Date().valueOf()}_${name}`
     try {
-      res = resolve(cwd(), oss.dir, name)
+      res = resolve(cwd(), oss.dir, fn)
       const ws = createWriteStream(res)
       stream.pipe(ws)
     } catch (error) {
       console.log(error)
     }
-    const fp = join(this.prefix,oss.dir, name)
+    const fp = join(this.prefix,oss.dir, fn)
     return fp
   }
 
