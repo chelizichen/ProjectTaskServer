@@ -122,6 +122,13 @@ const ProjectTable = forwardRef((props: Props, ref) => {
 
   const columns: TableColumnProps<TaskItem>[] = [
     {
+      title: '项目名称',
+      dataIndex: 'project',
+      key: 'project',
+      align: 'center',
+      render: () => <div>{project.name}</div>
+    },
+    {
       title: '#',
       dataIndex: 'key',
       align: 'center',
@@ -151,14 +158,8 @@ const ProjectTable = forwardRef((props: Props, ref) => {
       title: '任务描述',
       dataIndex: 'desc',
       key: 'desc',
-      align: 'center'
-    },
-    {
-      title: '列表',
-      dataIndex: 'project',
-      key: 'project',
       align: 'center',
-      render: () => <div>{project.name}</div>
+      render: (_,record) => <div dangerouslySetInnerHTML={{__html:record.desc}}></div>
     },
     {
       title: '状态',
