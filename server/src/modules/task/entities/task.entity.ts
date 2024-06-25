@@ -26,7 +26,7 @@ export class Task {
   @Column({ default: 0 })
   status: number
 
-  @Column()
+  @Column({ type: 'longtext' })
   desc: string
 
   @Column()

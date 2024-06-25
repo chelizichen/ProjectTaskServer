@@ -77,6 +77,9 @@ const UpdateTask = (props: Props) => {
 
   useEffect(()=>{
     setAbled(false)
+    return ()=>{
+      setAbled(false)
+    }
   },[])
 
   return task ? (
@@ -90,7 +93,7 @@ const UpdateTask = (props: Props) => {
       <Switch defaultValue={false} onChange={onChange} />
       <Form form={form}>
         <Form.Item name="name" rules={[{ required: true, message: '任务名称不能为空' }]}>
-          <Input placeholder="任务名称" allowClear autoComplete="off" />
+          <Input placeholder="任务名称" allowClear autoComplete="off" disabled={!abled} />
         </Form.Item>
         {project && project.users.length ? (
           <Form.Item name="users">
@@ -106,18 +109,19 @@ const UpdateTask = (props: Props) => {
           </Form.Item>
         ) : null}
         <Form.Item name="level" rules={[{ required: true, message: '优先级不能为空' }]}>
-          <Select placeholder="优先级">
+          <Select placeholder="优先级"  disabled={!abled}>
             <Select.Option value="P1">P1</Select.Option>
             <Select.Option value="P2">P2</Select.Option>
             <Select.Option value="P3">P3</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item name="time" {...rangeConfig}>
+        <Form.Item name="time" {...rangeConfig} >
           <RangePicker
             style={{ width: '100%' }}
             showTime
             format="YYYY-MM-DD HH:mm:ss"
             placeholder={['开始时间', '结束时间']}
+            disabled={!abled}
           />
         </Form.Item>
         <Form.Item
