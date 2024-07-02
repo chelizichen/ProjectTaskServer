@@ -90,6 +90,7 @@ const UpdateTask = (props: Props) => {
       onOk={confirm}
       onCancel={() => setVisible(false)}
       maskClosable={false}
+      width={'80vw'}
     >
       <Switch defaultValue={false} onChange={onChange} />
       <Form form={form}>

@@ -66,6 +66,7 @@ const AddTask = (props: Props) => {
         form.resetFields()
         setVisible(false)
       }}
+      width={'80vw'}
     >
       <Form form={form} initialValues={{ users: [user.id] }}>
         <Form.Item name="name" rules={[{ required: true, message: '任务名称不能为空' }]}>
