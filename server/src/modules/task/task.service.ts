@@ -85,6 +85,7 @@ export class TaskService {
       .leftJoinAndSelect('task.users', 'users')
       .where('task.project = :projectId', { projectId })
       .andWhere('task.name LIKE :keyword')
+      .andWhere("task.status not in (-1,3)") // -1 已删除 3 已完成
       .setParameter('keyword', `%${keyword}%`)
       .skip((current - 1) * size)
       .take(size)
@@ -144,7 +145,8 @@ export class TaskService {
         id,
       },
     })
-    const res = await this.taskRepository.remove(data)
+    const newData  = Object.assign({},data,{status:-1}) // -1 代表删除
+    const res = await this.taskRepository.save(newData)
     if (res) {
       return {
         code: 200,
