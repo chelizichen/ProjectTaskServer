@@ -45,6 +45,7 @@ export class ProjectService {
       .leftJoinAndSelect('project.tasks', 'tasks')
       .leftJoinAndSelect('project.users', 'userList')
       .leftJoinAndSelect('tasks.users', 'users')
+      .andWhere("tasks.status not in (-1,3)")
       .getMany()
     return {
       code: 200,
