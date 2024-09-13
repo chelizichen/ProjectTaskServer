@@ -39,13 +39,15 @@ export class ProjectService {
     }
   }
 
-  async findAll() {
+  async findAll(opts:string) {
+    opts = opts || "0,1,2"
+    console.log('opts',opts);
     const data = await this.projectRepository
       .createQueryBuilder('project')
       .leftJoinAndSelect('project.tasks', 'tasks')
       .leftJoinAndSelect('project.users', 'userList')
       .leftJoinAndSelect('tasks.users', 'users')
-      .andWhere("tasks.status not in (-1,3)")
+      .andWhere(`tasks.status in (${opts})`)
       .getMany()
     return {
       code: 200,

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common'
 import { ProjectService } from './project.service'
 import { ProjectDto } from './dto/project.dto'
@@ -23,8 +24,10 @@ export class ProjectController {
   }
 
   @Get('getList')
-  async findAll() {
-    return await this.projectService.findAll()
+  async findAll(@Query() query:{opts:string}) {
+    console.log('opts.query',query.opts);
+    
+    return await this.projectService.findAll(query.opts)
   }
 
   @Get(':id')

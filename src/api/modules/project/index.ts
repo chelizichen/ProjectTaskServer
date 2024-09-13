@@ -2,8 +2,8 @@ import { ProjectItem } from '../../../types/project'
 import { get, post, patch } from '../../request'
 
 export default {
-  getProjectList() {
-    return get<ProjectItem[]>('/project/getList')
+  getProjectList(params) {
+    return get<ProjectItem[]>('/project/getList',params)
   },
   addProject(params: { name: string }) {
     return post('/project/create', params)

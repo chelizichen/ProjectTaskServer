@@ -21,8 +21,14 @@ const PorjectList = forwardRef((props: Props, ref) => {
 
   const [form] = Form.useForm()
 
+  useEffect(()=>{
+    getProjectList()
+  },[searchParams])
+
   const getProjectList = () => {
-    api.project.getProjectList().then((res) => {
+    const opts = searchParams.get('opts')
+    console.log('opts 111',opts);
+    api.project.getProjectList({opts}).then((res) => {
       res.data.map((item) => {
         item.flag = false
         item.myTasks = item.tasks.filter((i) => i.users.map((u) => u.id).includes(user.id))
