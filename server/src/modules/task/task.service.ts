@@ -78,14 +78,14 @@ export class TaskService {
     }
   }
 
-  async findOne(projectId: number, current = 1, size = 5, keyword = '') {
+  async findOne(projectId: number, current = 1, size = 5, keyword = '',opts = "0,1,2") {
     const data = await this.taskRepository
       .createQueryBuilder('task')
       .leftJoinAndSelect('task.project', 'project')
       .leftJoinAndSelect('task.users', 'users')
       .where('task.project = :projectId', { projectId })
       .andWhere('task.name LIKE :keyword')
-      .andWhere("task.status not in (-1,3)") // -1 已删除 3 已完成
+      .andWhere(`task.status  in (${opts})`) // -1 已删除 3 已完成
       .setParameter('keyword', `%${keyword}%`)
       .skip((current - 1) * size)
       .take(size)

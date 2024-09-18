@@ -50,6 +50,7 @@ export class TaskController {
       current: number
       size: number
       keyword: string
+      opts : string
     },
   ) {
     return this.taskService.findOne(
@@ -57,6 +58,7 @@ export class TaskController {
       params.current,
       params.size,
       params.keyword,
+      params.opts
     )
   }
 

@@ -8,6 +8,7 @@ import api from '../../api'
 import { LoginUser } from '../../api/modules/user/types'
 import { useRandomColor } from '../../hooks/useRandomColor'
 import UpdateTask from './UpdateTask'
+import { useSearchParams } from 'react-router-dom'
 
 interface Props {
   keyword: string
@@ -24,15 +25,19 @@ const ProjectTable = forwardRef((props: Props, ref) => {
   const [size, setSize] = useState<number>(10)
   const [total, setTotal] = useState<number>(0)
   const [visible, setVisible] = useState(false)
+  const [searchParams] = useSearchParams()
 
   const getTaskDetail = () => {
+    const opts = searchParams.get('opts')
+    console.log('opts',opts);
     api.task
       .getTaskDetail({
         projectId: project.id,
         userId: user.id,
         current: currentPage,
         size,
-        keyword
+        keyword,
+        opts
       })
       .then((res) => {
         if (res.code === 200) {
@@ -101,6 +106,8 @@ const ProjectTable = forwardRef((props: Props, ref) => {
 
   const renderStatus = (status: number) => {
     switch (status) {
+      case -1:
+        return <Tag color="red">已删除</Tag>
       case 0:
         return <Tag color="#ff7070">待处理</Tag>
       case 1:

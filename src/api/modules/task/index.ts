@@ -11,6 +11,7 @@ export default {
     current: number
     size: number
     keyword: string
+    opts :string
   }) {
     return post<TaskItem[]>('/task/detail', params)
   },
